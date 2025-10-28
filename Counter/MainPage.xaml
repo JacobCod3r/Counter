@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Counter.Models"
+             x:Class="Counter.MainPage"
+             x:Name="Page"
+             Title="Counter">
+
+    <Grid RowDefinitions="Auto,*" 
+          Padding="20" 
+          RowSpacing="12">
+
+        <Grid Grid.Row="0" 
+              ColumnDefinitions="*,Auto,Auto,Auto" 
+              ColumnSpacing="8">
+            <Entry Placeholder="Name" 
+                   Text="{Binding NewName}" />
+
+            <Entry Grid.Column="1" 
+                   WidthRequest="90"
+                   Placeholder="Initial" 
+                   Keyboard="Numeric"
+                   Text="{Binding NewInitialText}" />
+
+            <Picker Grid.Column="2" 
+                    WidthRequest="130"
+                    Title="Color"
+                    ItemsSource="{Binding AvailableColors}"
+                    SelectedItem="{Binding NewColorName, Mode=TwoWay}" />
+
+            <Button Grid.Column="3" Text="Add" Command="{Binding AddCommand}" />
+        </Grid>
+
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Counters}"
+                        SelectionMode="None"
+                        VerticalOptions="FillAndExpand">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Counter">
+                    <Frame Padding="12" 
+                           Margin="0,6" 
+                           CornerRadius="12" 
+                           HasShadow="True"
+                           BackgroundColor="{Binding ColorHex}">
+                        <Grid RowDefinitions="Auto,Auto" 
+                              ColumnDefinitions="*,Auto" 
+                              ColumnSpacing="8" 
+                              RowSpacing="8">
+
+                            <Label Grid.Row="0" 
+                                   Grid.Column="0"
+                                   Text="{Binding Name}" 
+                                   FontAttributes="Bold" 
+                                   FontSize="18"/>
+                            <Label Grid.Row="0" 
+                                   Grid.Column="1"
+                                   Text="{Binding Value}" 
+                                   FontAttributes="Bold" 
+                                   FontSize="20"
+                                   HorizontalOptions="End" 
+                                   VerticalOptions="Center"/>
+
+                            <Grid Grid.Row="1" 
+                                  Grid.ColumnSpan="2" 
+                                  ColumnDefinitions="Auto,Auto,Auto,Auto" 
+                                  ColumnSpacing="8">
+                                <Button Text="−"
+                                        Command="{Binding BindingContext.DecrementCommand, Source={x:Reference Page}}"
+                                        CommandParameter="{Binding .}"/>
+                                <Button Grid.Column="1" 
+                                        Text="+"
+                                        Command="{Binding BindingContext.IncrementCommand, Source={x:Reference Page}}"
+                                        CommandParameter="{Binding .}"/>
+                                <Button Grid.Column="2" 
+                                        Text="Reset"
+                                        Command="{Binding BindingContext.ResetCommand, Source={x:Reference Page}}"
+                                        CommandParameter="{Binding .}"/>
+                                <Button Grid.Column="3" 
+                                        Text="Delete"
+                                        Command="{Binding BindingContext.DeleteCommand, Source={x:Reference Page}}"
+                                        CommandParameter="{Binding .}"/>
+                            </Grid>
+
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Padding="32" 
+                                     HorizontalOptions="Center">
+                    <Label Text="No counters yet."/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+
+    </Grid>
+</ContentPage>
